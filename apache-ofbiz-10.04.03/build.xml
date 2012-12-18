@@ -24,7 +24,7 @@ under the License.
     <property name="memory.initial.param" value="-Xms128M"/>
     <property name="memory.max.param" value="-Xmx512M"/>
     <property name="pos.memory.max.param" value="-Xmx512M"/>
-    <property name="memory.maxpermsize.param" value="-XX:MaxPermSize=128m"/>
+    <property name="memory.maxpermsize.param" value="-XX:MaxPermSize=512m"/>
 
     <available file="applications/build.xml" property="applications.present"/>
     <available file="specialpurpose/build.xml" property="specialpurpose.present"/>
@@ -110,7 +110,7 @@ under the License.
         </subant>
     </target>
 
-    <target name="download-selenium" 
+    <target name="download-selenium"
           description="Download the selenium files">
         <subant target="install-seleniumxml">
             <filelist dir="." files="framework/testtools/build.xml"/>
@@ -137,11 +137,11 @@ under the License.
             </fileset>
         </subant>
 
-        <subant target="clean"  failonerror="${specialpurpose.present}" 
+        <subant target="clean"  failonerror="${specialpurpose.present}"
           description="Use failonerror=false in case the specialpurpose directory is not there">
             <filelist dir="." files="specialpurpose/build.xml"/>
         </subant>
-        <subant target="clean" failonerror="${applications.present}" 
+        <subant target="clean" failonerror="${applications.present}"
           description="Use failonerror=false in case the applications directory is not there">
             <filelist dir="." files="applications/build.xml"/>
         </subant>
@@ -263,7 +263,7 @@ under the License.
     <!-- WebSite Targets                                                    -->
     <!-- ================================================================== -->
 
-    <target name="build-website" 
+    <target name="build-website"
             description="For committers : Update dtds and JavaDoc from OFBiz intance to site">
         <antcall target="copy-dtds"/>
         <antcall target="docs"/>
@@ -315,20 +315,34 @@ under the License.
     <!-- Start OFBiz                                                        -->
     <!-- ================================================================== -->
 
-    <target name="run" 
+    <target name="run"
             description="This will start OFBiz">
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${pos.memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
         </java>
     </target>
-    <target name="run-pos" 
+    <target name="run-deployement" depends="build" 
+    	    description="This will start OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${pos.memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+        </java>
+    </target>
+    <target name="run-pos"
             description="Start the POS (Point of sale) system">
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="pos"/>
         </java>
     </target>
@@ -338,6 +352,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
         </java>
     </target>
@@ -347,12 +363,16 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
         </java>
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="delegator=default#DEMO1"/>
         </java>
@@ -360,6 +380,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="delegator=default#DEMO2"/>
         </java>
@@ -370,6 +392,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="readers=seed"/>
         </java>
@@ -380,6 +404,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="readers=seed,seed-initial,ext"/>
         </java>
@@ -390,8 +416,40 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="readers=seed,seed-initial,ext,ext-test"/>
+        </java>
+    </target>
+    <target name="run-install-demodata" depends="build"
+        description="This loads demo data; meant for adding data for BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=demodata,proj_data"/>
+        </java>
+    </target>
+    <target name="run-install-proddata" depends="build"
+            description="This loads prod data; meant for adding data for BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=proddata"/>
+        </java>
+    </target>
+    <target name="run-bigfish-parameters" depends="build"
+        description="This loads bigFishParameters.xml data; meant for adding/updating product store parms and various types to run BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=parameters"/>
         </java>
     </target>
     <target name="run-install-readers" depends="build"
@@ -400,6 +458,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="readers=${data-readers}"/>
         </java>
@@ -410,6 +470,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="install"/>
             <arg value="delegator=default"/>
             <arg value="file=${data-file}"/>
@@ -438,7 +500,7 @@ under the License.
         <antcall target="load-admin-user-login"/>
     </target>
 
-    <target name="run-debug" depends="build" 
+    <target name="run-debug" depends="build"
             description="Starts OFBiz in debugging mode">
         <java jar="ofbiz.jar"  fork="true">
             <jvmarg value="${memory.initial.param}"/>
@@ -446,16 +508,20 @@ under the License.
             <jvmarg value="${memory.maxpermsize.param}"/>
             <jvmarg value="-Xnoagent"/>
             <jvmarg value="-Djava.compiler=NONE"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <jvmarg value="-Xdebug"/>
             <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8091"/>
         </java>
     </target>
-    <target name="run-tests" depends="build" 
+    <target name="run-tests" depends="build"
           description="Run OFBiz default tests, execute ant run-install before and see results in runtime/logs/test-results/html/all-tests.html">
         <java jar="ofbiz.jar" fork="true" resultproperty="test.result">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="test"/>
         </java>
         <mkdir dir="runtime/logs/test-results/html"/>
@@ -482,6 +548,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="testlist"/>
             <arg file="runtime/test-list-build.xml"/>
             <arg value="-ant"/>
@@ -493,6 +561,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="test"/>
             <arg value="-component=${test.component}"/>
             <arg value="-case=${test.case}"/>
@@ -516,6 +586,8 @@ under the License.
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
             <jvmarg value="${memory.maxpermsize.param}"/>
+            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
+            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
             <arg value="test"/>
             <arg value="-component=${test.component}"/>
             <arg value="-suitename=${test.suiteName}"/>
@@ -528,12 +600,12 @@ under the License.
             </condition>
         </fail>
     </target>
-    <target name="run-test-list" depends="_setup-separated-test-run" 
+    <target name="run-test-list" depends="_setup-separated-test-run"
             description="Run all configured tests, stopping/starting ofbiz between each test">
         <delete dir="runtime/logs/test-results"/>
         <ant antfile="runtime/test-list-build.xml" target="all-tests"/>
     </target>
-    
+
     <target name="cobertura-report">
         <delete dir="runtime/logs/cobertura-report"/>
         <mkdir dir="runtime/logs/cobertura-report"/>
@@ -558,7 +630,7 @@ under the License.
     <!-- ================================================================== -->
     <!-- Create New Component. This target will create basic directory structure for an OFBiz component in hot-deploy directory. -->
     <!-- ================================================================== -->
-    
+
     <target name="create-component"
             description="Creates the layout of an OFBiz component in the hot-deploy folder.">
         <input addproperty="component-name" message="Component name: (e.g. mycomponent) [Mandatory]"/>
