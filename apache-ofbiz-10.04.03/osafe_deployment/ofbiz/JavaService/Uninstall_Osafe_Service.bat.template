@@ -1,1 +1,0 @@
-javaservice -uninstall "@service.name@"
